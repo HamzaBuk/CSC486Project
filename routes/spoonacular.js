@@ -1,21 +1,40 @@
-//This is the middleware for calling the spoonacular API
-//I got this code off of stack overflow, it will likely need changes
 const express = require('express');
-const router = express.router();
-const got = require('got');
-const { pipeline } = require('stream');
-const key = process.env.API_KEY;
+const router = express.Router();
+const axios = require('axios');
+const pool = require('../db');
+const authenticate = require('../middleware/authenticate'); // Ensures only logged-in users can access
 
-router.get('/', function(req, res) {
-  const dataStream = got.stream({
-      uri: 'https://api.spoonacular.com/recipes/complexSearch/information?apiKey=${key}&number=1', //We would want this URL to be flexible in the full application
-  });
-  pipeline(dataStream, res, (err) => {
-      if (err) {
-          console.log(err);
-          res.sendStatus(500);
-      }
-  });
+// GET /spoonacular/recipes - Fetch recipes based on the user's pantry ingredients
+router.get('/recipes', authenticate, async (req, res) => {
+  try {
+    //fetch user's ingredients from the database
+    const result = await pool.query(
+      'SELECT name FROM ingredients WHERE user_id = $1',
+      [req.user.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'No ingredients found in pantry' });
+    }
+
+    //convert ingredient names into a comma-separated list for the Spoonacular API
+    const ingredientList = result.rows.map(row => row.name).join(',');
+
+    //call the Spoonacular API
+    const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
+      params: {
+        apiKey: process.env.SPOONACULAR_API_KEY, // API key stored in .env
+        ingredients: ingredientList, // e.g., "apples,flour,sugar"
+        number: 5, // Adjust as needed
+      },
+    });
+
+    // 4️⃣ Return the list of recipes to the frontend
+    res.json(response.data);
+  } catch (err) {
+    console.error('Spoonacular API error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch recipes' });
+  }
 });
 
 module.exports = router;
