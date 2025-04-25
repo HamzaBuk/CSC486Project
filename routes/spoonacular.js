@@ -29,7 +29,7 @@ router.get('/recipes', authenticate, async (req, res) => {
       },
     });
 
-    // 4️⃣ Return the list of recipes to the frontend
+    // Return the list of recipes to the frontend
     res.json(response.data);
   } catch (err) {
     console.error('Spoonacular API error:', err.message);
