@@ -1,25 +1,28 @@
 router.post('/recipes', authenticate, async (req, res) => {
-  const { ingredients } = req.body;
-
+  const { ingredients, diet, cuisine, mealType } = req.body;
 
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
     return res.status(400).json({ error: 'No ingredients provided' });
   }
 
-  const ingredientList = ingredients.join(',');
-
   try {
-    const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
-      params: {
-        apiKey: process.env.SPOONACULAR_API_KEY,
-        ingredients: ingredientList,
-        number: 5
-      }
+    const params = {
+      apiKey: process.env.SPOONACULAR_API_KEY,
+      includeIngredients: ingredients.join(','),
+      number: 5,
+    };
+
+    if (diet) params.diet = diet;
+    if (cuisine) params.cuisine = cuisine;
+    if (mealType) params.type = mealType;
+
+    const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
+      params,
     });
 
-    res.json(response.data);
+    res.json(response.data.results);
   } catch (err) {
-    console.error('Spoonacular API error:', err.message);
+    console.error('Spoonacular complexSearch error:', err.message);
     res.status(500).json({ error: 'Failed to fetch recipes' });
   }
 });
