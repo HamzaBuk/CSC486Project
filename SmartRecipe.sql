@@ -1,18 +1,18 @@
--- this is just for this code, probably don't need when launching to cloud bc we would have to create it in terminal
-CREATE DATABASE smartRecipe;
+CREATE DATABASE smartrecipe;
 
--- enter database
-\c smartRecipe
+\c smartrecipe
 
--- table for users
-CREATE TABLE Users(
+CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE,
     password_hash TEXT NOT NULL
 );
 
--- table for recipes
-CREATE TABlE recipes(
+
+
+
+CREATE TABLE recipes (
     id SERIAL PRIMARY KEY, 
     spoonacular_id INT UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -23,32 +23,31 @@ CREATE TABlE recipes(
     image_url TEXT
 );
 
--- table for ingredients (user currently has these)
-CREATE TABLE ingredients(
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL 
+CREATE TABLE ingredients (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES Users(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  quantity VARCHAR(50),
+  unit VARCHAR(50),
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- recipe ingredients (needed for the recipes)
-CREATE TABLE recipe_ingredients(
+CREATE TABLE recipe_ingredients (
     recipe_id INT REFERENCES recipes(id) ON DELETE CASCADE,
-    ingreident_id INT REFERENCES ingredients(id) ON DELETE CASCADE, 
+    ingredient_id INT REFERENCES ingredients(id) ON DELETE CASCADE, 
     amount VARCHAR(100),
-    PRIMARY KEY (recipe_id, ingreident_id)
+    PRIMARY KEY (recipe_id, ingredient_id)
 );
 
---saved recipes
-CREATE TABLE saved_recipes(
-    user_id INT REFERENCES Users(id) on DELETE CASCADE,
+CREATE TABLE saved_recipes (
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     recipe_id INT REFERENCES recipes(id) ON DELETE CASCADE,
     saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, recipe_id)
 );
 
--- users pantry (saved recipes what ingredients they llke)
-CREATE TABLE pantry(
+CREATE TABLE pantry (
     user_id INT REFERENCES Users(id) ON DELETE CASCADE,
-    ingreident_id INT REFERENCES ingredients(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, ingreident_id)
+    ingredient_id INT REFERENCES ingredients(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, ingredient_id)
 );
-
