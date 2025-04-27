@@ -1,5 +1,34 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+        <script src="js/index.js"></script>
+    </head>
     <body>
-        The index route is working!
+        <form action="/request.html" method="get">
+            <button type="submit" formaction="pantry.html" class="btn btn-secondary"
+            formmethod="get">Pantry</button>
+            <button type="submit" formaction="savedrecipes.html" class="btn btn-secondary"
+            formmethod="get">Saved Recipes</button><br><br>
+            <h1>
+                Home
+            </h1><br>
+            <label for="ingredients">Enter your list of ingredients, seperated with Commas</label><br>
+            <input type="text" id="ingredients"><br><br>
+            <label for="diet">Diet</label>
+            <select id="diet">
+                <option value="" selected>None</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="keto">Keto</option>
+            </select><br><br>
+            <label for="numRecipes">Number of Recipes</label><br>
+            <input type="number" id="numRecipes" min="1" max="5" step="1" value="1" onkeydown="return false">
+            <br><br><button type="button" class="btn btn-primary" onclick="getRecipes()">Get Recipes</button>
+        </form>
+        <div id="recipes" class="accordion">
+
+        </div>
     </body>
 </html>

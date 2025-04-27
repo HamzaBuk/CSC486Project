@@ -10,6 +10,7 @@ router.post('/recipes', authenticate, async (req, res) => {
       apiKey: process.env.SPOONACULAR_API_KEY,
       includeIngredients: ingredients.join(','),
       number: 5,
+      sort: "random"
     };
 
     if (diet) params.diet = diet;
@@ -26,3 +27,4 @@ router.post('/recipes', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch recipes' });
   }
 });
+
