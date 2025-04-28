@@ -1,1 +1,34 @@
+version: '3.8'
 
+services:
+  database:
+    image: postgres:15
+    container_name: smartrecipe-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: smartrecipe-app
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
+    depends_on:
+      - database
+
+volumes:
+  postgres_data:
