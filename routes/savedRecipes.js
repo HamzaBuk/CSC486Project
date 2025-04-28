@@ -4,7 +4,7 @@ const authenticate = require('../middleware/authenticate');
 const pool = require('../db');
 
 
-router.post('/', authenticate, async (req, res) => {
+router.post('/saveRecipe', authenticate, async (req, res) => {
   const { recipeId, title, image } = req.body;
 
   if (!recipeId || !title) {
@@ -25,7 +25,7 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 
-router.get('/', authenticate, async (req, res) => {
+router.get('/getSavedRecipes', authenticate, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT * FROM saved_recipes WHERE user_id = $1 ORDER BY saved_at DESC',
