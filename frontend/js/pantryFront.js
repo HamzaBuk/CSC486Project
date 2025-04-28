@@ -14,7 +14,7 @@ const showIngredients = (ingredientData) => {
     container.innerHTML = '';
     ingredientData.ingredients.forEach(ingredient => {
         const containerCode = `
-        <div>
+        <div class="container-md">
         <body>${ingredient}</body>
         <div>
         <button type="button" class="btn btn-primary" onclick="deleteIngredient(${ingredient})">Delete Ingredient</button>
