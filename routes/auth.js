@@ -23,8 +23,8 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  const { username, password } = req.body;
+  const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
   if (!user.rows.length || !(await bcrypt.compare(password, user.rows[0].password_hash))) {
     return res.status(401).json({ error: 'Invalid credentials' });
