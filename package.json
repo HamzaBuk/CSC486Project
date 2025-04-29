@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "name": "smartRecipes",
+  "version": "1.0.0",
+  "main": "server.js"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
