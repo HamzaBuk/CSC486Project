@@ -1,13 +1,21 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^5.1.0"
-  },
   "name": "smartRecipes",
   "version": "1.0.0",
+  "description": "Smart Recipe App for CSC486",
   "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.10.0"
+  }
 }
