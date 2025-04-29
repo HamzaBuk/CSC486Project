@@ -38,6 +38,7 @@ services:
      - frontend_files:/var/lib/frontend/data
     depends_on:
       - database
+      - frontend
 
 volumes:
   postgres_data:
