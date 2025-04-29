@@ -16,6 +16,7 @@ services:
 
   frontend:
     container_name: smartrecipe_frontend
+    build: frontend
     restart: always
     volumes:
      - frontend_files:/var/lib/frontend/data
