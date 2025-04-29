@@ -1,1 +1,1 @@
-COPY frontend/ /CSC486Project/frontend
+COPY frontend/ ./frontend
