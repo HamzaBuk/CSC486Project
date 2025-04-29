@@ -11,6 +11,8 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./smartrecipe.sql:/docker-entrypoint-initdb.d/smartrecipe.sql
+      
     ports:
       - "5432:5432"
 
