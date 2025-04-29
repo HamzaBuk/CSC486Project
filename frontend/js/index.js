@@ -3,7 +3,7 @@ const getRecipes = () => {
     const diet = document.querySelector('#diet').value;
     const numRecipes = document.querySelector('#numRecipes').value;
     const input = {ingredients, diet, numRecipes};
-    fetch('http://localhost:4000/getRecipes', {method:'POST', body: JSON.stringify(input), headers: {'content-type':'application/json'}})
+    fetch('http://localhost:4000/spoonacular/recipes', {method:'POST', body: JSON.stringify(input), headers: {'content-type':'application/json'}})
     .then((res) =>  res.json())
     .then((jsoned) => {
         //console.log(jsoned.results[0].title);
