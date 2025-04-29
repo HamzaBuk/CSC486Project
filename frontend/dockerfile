@@ -1,1 +1,1 @@
-COPY frontend/ ./frontend
+COPY frontend/ ./frontend_files
