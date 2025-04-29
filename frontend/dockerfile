@@ -1,1 +1,2 @@
+FROM Ubuntu:latest
 COPY frontend/ ./frontend_files
