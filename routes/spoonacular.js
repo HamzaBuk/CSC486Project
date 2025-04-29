@@ -1,3 +1,8 @@
+const express = require('express');
+const router = express.Router();
+const axios = require('axios');
+const authenticate = require('../middleware/authenticate');
+
 router.post('/recipes', authenticate, async (req, res) => {
   const { ingredients, diet, cuisine, mealType } = req.body;
 
@@ -10,7 +15,6 @@ router.post('/recipes', authenticate, async (req, res) => {
       apiKey: process.env.SPOONACULAR_API_KEY,
       includeIngredients: ingredients.join(','),
       number: 5,
-      sort: "random"
     };
 
     if (diet) params.diet = diet;
@@ -23,8 +27,10 @@ router.post('/recipes', authenticate, async (req, res) => {
 
     res.json(response.data.results);
   } catch (err) {
-    console.error('Spoonacular complexSearch error:', err.message);
+    console.error('Spoonacular API error:', err.message);
     res.status(500).json({ error: 'Failed to fetch recipes' });
   }
 });
+
+module.exports = router;
 

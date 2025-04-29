@@ -14,6 +14,12 @@ services:
     ports:
       - "5432:5432"
 
+  frontend:
+    container_name: smartrecipe_frontend
+    build: frontend
+    restart: always
+    volumes:
+     - frontend_files:/frontend_files
   app:
     build: .
     container_name: smartrecipe-app
@@ -27,8 +33,12 @@ services:
       DB_PORT: ${DB_PORT}
       DB_DATABASE: ${DB_DATABASE}
       SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
+    volumes:
+     - frontend_files:/frontend_files
     depends_on:
       - database
+      - frontend
 
 volumes:
   postgres_data:
+  frontend_files:
