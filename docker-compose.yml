@@ -19,7 +19,7 @@ services:
     build: frontend
     restart: always
     volumes:
-     - frontend_files:/var/lib/frontend/data
+     - frontend_files:/CSC486Project/frontend
 
   app:
     build: .
@@ -35,7 +35,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
     volumes:
-     - frontend_files:/var/lib/frontend/data
+     - frontend_files:/CSC486Project/frontend
     depends_on:
       - database
       - frontend
