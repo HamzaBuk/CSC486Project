@@ -1,1 +1,1 @@
-COPY frontend/ /var/lib/frontend/data
+COPY frontend/ /CSC486Project/frontend
