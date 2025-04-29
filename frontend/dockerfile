@@ -1,2 +1,3 @@
-FROM ubuntu:latest
-COPY . ./frontend_files
+FROM nginx:latest
+
+COPY . /usr/share/nginx/html
