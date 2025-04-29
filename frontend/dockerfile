@@ -1,1 +1,1 @@
-COPY frontend/ root/frontend/
+COPY frontend/ /var/lib/frontend/data
