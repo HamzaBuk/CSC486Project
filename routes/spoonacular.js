@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const authenticate = require('../middleware/authenticate');
 
-router.post('/recipes', authenticate, async (req, res) => {
+router.post('/getRecipes', authenticate, async (req, res) => {
   const { ingredients, diet, cuisine, mealType } = req.body;
 
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
