@@ -7,7 +7,7 @@ const path = require('path');
 
 // Register
 router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password } = req.json().body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.json().body;
   const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
   if (!user.rows.length || !(await bcrypt.compare(password, user.rows[0].password_hash))) {

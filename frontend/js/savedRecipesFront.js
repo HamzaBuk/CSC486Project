@@ -1,7 +1,10 @@
 const getRecipes = () => {
-    const id //get ID code;
+    const token = localStorage.getItem('token'); //get ID code;
     const input = {id};
-    fetch('http://localhost:3000/getSavedRecipes', {method:'POST', body: JSON.stringify(input), headers: {'content-type':'application/json'}})
+    fetch('http://localhost:3000/getSavedRecipes', {method:'POST', body: JSON.stringify(input), 
+        headers: {'content-type':'application/json',
+                  'Authorization': 'Bearer ' + token
+        }})
     .then((res) =>  res.json())
     .then((jsoned) => {
         //console.log(jsoned.results[0].title);
