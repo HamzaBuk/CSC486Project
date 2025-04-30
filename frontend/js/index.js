@@ -1,16 +1,47 @@
 const getRecipes = () => {
-    const ingredients = document.querySelector('#ingredients').value;
-    const diet = document.querySelector('#diet').value;
-    const numRecipes = document.querySelector('#numRecipes').value;
-    const input = {ingredients, diet, numRecipes};
-    fetch('http://localhost:4000/spoonacular/recipes', {method:'POST', body: JSON.stringify(input), headers: {'content-type':'application/json'}})
-    .then((res) =>  res.json())
-    .then((jsoned) => {
-        //console.log(jsoned.results[0].title);
-        showRecipes(jsoned);
-    });
+  const ingredientsInput = document.querySelector('#ingredients').value;
+  const diet = document.querySelector('#diet').value;
+  const numRecipes = document.querySelector('#numRecipes').value;
 
-}
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert("You must be logged in to get recipes.");
+    return;
+  }
+
+  const input = {
+    ingredients: ingredientsInput.split(',').map(i => i.trim()),
+    diet,
+    number: parseInt(numRecipes)
+  };
+
+  fetch('http://localhost:4000/spoonacular/recipes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify(input)
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error('Failed to fetch recipes');
+    }
+    return res.json();
+  })
+  .then(data => {
+    if (data.length === 0) {
+      alert("No recipes found.");
+    } else {
+      showRecipes(data);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Something went wrong: " + err.message);
+  });
+};
+
 
 const saveRecipe = (id) => {
     const savedRecipe = savedRecipes.find((recipe) => recipe.id === id)
