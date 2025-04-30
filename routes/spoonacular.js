@@ -18,7 +18,6 @@ router.post('/getRecipes', authenticate, async (req, res) => {
     };
 
     if (diet) params.diet = diet;
-    if (cuisine) params.cuisine = cuisine;
     if (mealType) params.type = mealType;
 
     const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
