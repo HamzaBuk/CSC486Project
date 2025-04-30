@@ -1,5 +1,5 @@
 {
-  "name": "smartRecipes",
+  "name": "smartrecipes",
   "version": "1.0.0",
   "description": "Smart Recipe App for CSC486",
   "main": "server.js",
@@ -11,11 +11,18 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",
-    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamzaBuk/CSC486Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HamzaBuk/CSC486Project/issues"
+  },
+  "homepage": "https://github.com/HamzaBuk/CSC486Project#readme"
 }

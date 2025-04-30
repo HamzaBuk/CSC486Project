@@ -9,6 +9,10 @@ const savedRecipeRoutes = require('./routes/savedRecipes');
 app.use(express.json());
 
 // Route imports
+app.get('/', (req, res) => {
+    res.sendFile('/app/frontend/login.html');
+});
+
 app.use('/auth', authRoutes);           // /auth/register, /auth/login
 app.use('/ingredients', ingredientRoutes); // protected routes
 app.use('/spoonacular', spoonacularRoutes);

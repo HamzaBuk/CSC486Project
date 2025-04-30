@@ -10,6 +10,10 @@ COPY package*.json ./
 #Install all npm dependencies 
 RUN npm install 
 
+RUN npm uninstall bcrypt
+
+RUN npm install bcrypt
+
 #copy all the app
 COPY . . 
 

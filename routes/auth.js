@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
+const path = require('path');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -15,6 +16,7 @@ router.post('/register', async (req, res) => {
       [username, email, hashedPassword]
     );
     const token = jwt.sign({ userId: result.rows[0].id }, process.env.JWT_SECRET);
+    alert("it worked");
     res.status(201).json({ token });
   } catch (err) {
     res.status(400).json({ error: 'Email/username already exists' });
@@ -31,7 +33,8 @@ router.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign({ userId: user.rows[0].id }, process.env.JWT_SECRET);
-  res.json({ token });
+  res.json({ token })
+  res.sendFile(path.join(__dirname, './app/frontend/index.html'))
 });
 
 module.exports = router;
