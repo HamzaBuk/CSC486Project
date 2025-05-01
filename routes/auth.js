@@ -7,7 +7,7 @@ const path = require('path');
 
 // Register
 router.post('/register', async (req, res) => {
-  const { username, email, password } = req.json().body;
+  const { username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
@@ -16,7 +16,6 @@ router.post('/register', async (req, res) => {
       [username, email, hashedPassword]
     );
     const token = jwt.sign({ userId: result.rows[0].id }, process.env.JWT_SECRET);
-    alert("it worked");
     res.status(201).json({ token });
   } catch (err) {
     res.status(400).json({ error: 'Email/username already exists' });
@@ -25,7 +24,7 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  const { username, password } = req.json().body;
+  const { username, password } = req.body;
   const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
   if (!user.rows.length || !(await bcrypt.compare(password, user.rows[0].password_hash))) {
@@ -34,7 +33,6 @@ router.post('/login', async (req, res) => {
 
   const token = jwt.sign({ userId: user.rows[0].id }, process.env.JWT_SECRET);
   res.json({ token })
-  res.sendFile(path.join(__dirname, './app/frontend/index.html'))
 });
 
 module.exports = router;

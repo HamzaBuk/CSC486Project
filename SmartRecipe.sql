@@ -2,7 +2,7 @@ CREATE DATABASE smartrecipe;
 
 \c smartrecipe
 
-CREATE TABLE Users (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE,

@@ -7,12 +7,9 @@ const spoonacularRoutes = require('./routes/spoonacular');
 const savedRecipeRoutes = require('./routes/savedRecipes');
 
 app.use(express.json());
+app.use(express.static('frontend', {index: "login.html"}));
 
 // Route imports
-app.get('/', (req, res) => {
-    res.sendFile('/app/frontend/login.html');
-});
-
 app.use('/auth', authRoutes);           // /auth/register, /auth/login
 app.use('/ingredients', ingredientRoutes); // protected routes
 app.use('/spoonacular', spoonacularRoutes);
