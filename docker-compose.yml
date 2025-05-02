@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db-init:/docker-entrypoint-initdb.d
+      - ./SmartRecipe.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
 
