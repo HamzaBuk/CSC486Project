@@ -23,7 +23,8 @@ router.post('/getRecipes', authenticate, async (req, res) => {
       params,
     });
 
-    res.json(response.data.results);
+  res.json({ results: response.data.results });
+
   } catch (err) {
     console.error('Spoonacular API error:', err.message);
     res.status(500).json({ error: 'Failed to fetch recipes' });
