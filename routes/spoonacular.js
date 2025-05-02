@@ -4,7 +4,7 @@ const axios = require('axios');
 const authenticate = require('../middleware/authenticate');
 
 router.post('/getRecipes', authenticate, async (req, res) => {
-  const { ingredients, diet, cuisine, mealType } = req.body;
+  const { ingredients, diet, number } = req.body;
 
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
     return res.status(400).json({ error: 'No ingredients provided' });
@@ -14,11 +14,10 @@ router.post('/getRecipes', authenticate, async (req, res) => {
     const params = {
       apiKey: process.env.SPOONACULAR_API_KEY,
       includeIngredients: ingredients.join(','),
-      number: 5,
+      number: number || 5,
     };
 
     if (diet) params.diet = diet;
-    if (mealType) params.type = mealType;
 
     const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
       params,
