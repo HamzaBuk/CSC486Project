@@ -35,6 +35,7 @@ services:
       DB_HOST: database
       DB_PORT: ${DB_PORT}
       SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
+      JWT_SECRET: $(JWT_SECRET)
     volumes:
       - frontend_files:/frontend_files
     depends_on:
