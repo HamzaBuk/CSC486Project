@@ -1,4 +1,4 @@
-CREATE DATABASE smartrecipe;
+-- CREATE DATABASE smartrecipe;
 
 \c smartrecipe
 
