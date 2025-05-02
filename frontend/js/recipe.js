@@ -18,7 +18,7 @@ const getRecipes = () => {
     number: parseInt(numRecipes)
   };
 
-  fetch('${backendURL}/spoonacular/getRecipes', {
+  fetch(`${backendURL}/spoonacular/getRecipes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const getRecipes = () => {
 
 const saveRecipe = (id) => {
     const savedRecipe = savedRecipes.find((recipe) => recipe.id === id)
-    fetch('${backendURL}/savedRecipes/saveRecipe', {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
+    fetch(`${backendURL}/savedRecipes/saveRecipe`, {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
     .then((res) =>  res.json())
     .then((jsoned) => {
          console.log(jsoned.results[0].title);
