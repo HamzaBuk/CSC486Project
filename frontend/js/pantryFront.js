@@ -1,7 +1,9 @@
+const backendURL = `http://${window.location.hostname}:4000`;
+
 const getIngredients = () => {
     const id = localStorage.getItem('token');//get ID code;
     const input = {id};
-    fetch('http://localhost:4000/ingredients', {method:'POST', body: JSON.stringify(input), 
+    fetch(${backendURL}/ingredients', {method:'POST', body: JSON.stringify(input), 
         headers: {'content-type':'application/json', 
                   'Authorization':'bearer '+id
         }})
@@ -26,7 +28,7 @@ const newIngredient = () =>{
     if(!name || !quantity || !unit){
         alert("Please fill in all ingredient information.")
     }else{
-        fetch('http://localhost:4000/spoonacular/recipes', {
+        fetch('${backendURL}/spoonacular/recipes', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
