@@ -15,7 +15,7 @@ const getRecipes = () => {
     number: parseInt(numRecipes)
   };
 
-  fetch('http://localhost:4000/spoonacular/recipes', {
+  fetch('http://localhost:4000/spoonacular/getRecipes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
