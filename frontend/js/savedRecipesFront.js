@@ -3,7 +3,7 @@ const backendURL = `http://${window.location.hostname}:4000`;
 const getRecipes = () => {
     const token = localStorage.getItem('token'); //get ID code;
     const input = {id};
-    fetch('${backendURL}/getSavedRecipes', {method:'POST', body: JSON.stringify(input), 
+    fetch(`${backendURL}/getSavedRecipes`, {method:'POST', body: JSON.stringify(input), 
         headers: {'content-type':'application/json',
                   'Authorization': 'Bearer ' + token
         }})
