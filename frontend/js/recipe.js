@@ -1,3 +1,6 @@
+const backendURL = `http://${window.location.hostname}:4000`;
+
+
 const getRecipes = () => {
   const ingredientsInput = document.querySelector('#ingredients').value;
   const diet = document.querySelector('#diet').value;
@@ -15,7 +18,7 @@ const getRecipes = () => {
     number: parseInt(numRecipes)
   };
 
-  fetch('http://localhost:4000/spoonacular/getRecipes', {
+  fetch('${backendURL}:4000/spoonacular/getRecipes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +48,7 @@ const getRecipes = () => {
 
 const saveRecipe = (id) => {
     const savedRecipe = savedRecipes.find((recipe) => recipe.id === id)
-    fetch('http://localhost:4000/savedRecipes/saveRecipe', {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
+    fetch('${backendURL}:4000/savedRecipes/saveRecipe', {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
     .then((res) =>  res.json())
     .then((jsoned) => {
          console.log(jsoned.results[0].title);
