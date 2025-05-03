@@ -5,14 +5,15 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: smartuser
-      POSTGRES_PASSWORD: smartpassword
-      POSTGRES_DB: smartrecipe
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./SmartRecipe.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
+    container_name: database
 
   smartrecipe-app:
     build:
@@ -21,11 +22,11 @@ services:
     depends_on:
       - smartrecipe-db
     environment:
-      - DB_HOST=smartrecipe-db
-      - DB_USER=smartuser
-      - DB_PASSWORD=smartpassword
-      - DB_NAME=smartrecipe
-      - DB_PORT=5432
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_DATABASE}
+      - DB_PORT=${DB_PORT}
     ports:
       - "4000:4000"
     command: nodemon server.js
@@ -41,4 +42,3 @@ services:
 
 volumes:
   postgres_data:
-
