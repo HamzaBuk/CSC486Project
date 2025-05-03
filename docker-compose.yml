@@ -1,45 +1,36 @@
+version: '3.8'
+
 services:
-  database:
+  smartrecipe-db:
     image: postgres:15
-    container_name: smartrecipe-db
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_DB: smartrecipe
+      POSTGRES_USER: smartuser
+      POSTGRES_PASSWORD: smartpass
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./SmartRecipe.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  frontend:
-    build: frontend
-    container_name: smartrecipe-frontend
-    restart: always
-    ports:
-      - "3000:80"
-    volumes:
-      - frontend_files:/usr/share/nginx/html
-
-  app:
-    build: .
-    container_name: smartrecipe-app
-    restart: always
-    ports:
-      - "4000:4000"
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_HOST: database
-      DB_PORT: ${DB_PORT}
-      SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
-      JWT_SECRET: ${JWT_SECRET}
+  smartrecipe-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/app
+    ports:
+      - "4000:4000"
     depends_on:
-      - database
+      - smartrecipe-db
+
+  smartrecipe-frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    volumes:
+      - frontend_files:/usr/share/nginx/html
+    ports:
+      - "3000:80"
 
 volumes:
   postgres_data:
