@@ -112,10 +112,19 @@ const getIngredientsList = (recipe) => {
 }
 
 const getInstructionSteps = (recipe) => {
-    let instructionSteps = '<ol>';
-    recipe.analyzedInstructions[0].steps.forEach(step => {
-       instructionSteps += `<li>${step.step}</li>`
-    });
-    instructionSteps += '</ol>';
-    return instructionSteps;
-}
+  if (
+    !Array.isArray(recipe.analyzedInstructions) ||
+    recipe.analyzedInstructions.length === 0 ||
+    !Array.isArray(recipe.analyzedInstructions[0].steps)
+  ) {
+    return '<p><i>No instructions available.</i></p>';
+  }
+
+  let instructionSteps = '<ol>';
+  recipe.analyzedInstructions[0].steps.forEach(step => {
+    instructionSteps += `<li>${step.step}</li>`;
+  });
+  instructionSteps += '</ol>';
+  return instructionSteps;
+};
+
