@@ -1,10 +1,10 @@
-# Use Node.js base image
+# Use official Node.js image
 FROM node:20
 
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
@@ -14,11 +14,12 @@ RUN npm install dotenv
 # Install nodemon 
 RUN npm install -g nodemon
 
-# Copy all app files
+# Copy rest of the app
 COPY . .
 
-# Expose the port
+# Expose the app port
 EXPOSE 4000
 
-# Start the server
+# Start the app
 CMD ["nodemon", "server.js"]
+
