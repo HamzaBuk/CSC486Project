@@ -11,20 +11,36 @@ router.post('/getRecipes', authenticate, async (req, res) => {
   }
 
   try {
-    const params = {
+
+    const searchParams = {
       apiKey: process.env.SPOONACULAR_API_KEY,
       includeIngredients: ingredients.join(','),
       number: number || 5,
     };
+    if (diet) searchParams.diet = diet;
 
-    if (diet) params.diet = diet;
+    const searchResponse = await axios.get(
+      'https://api.spoonacular.com/recipes/complexSearch',
+      { params: searchParams }
+    );
 
-    const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
-      params,
-    });
+    const recipeIds = searchResponse.data.results.map(recipe => recipe.id);
+    if (recipeIds.length === 0) {
+      return res.json({ results: [] });
+    }
 
-  res.json({ results: response.data.results });
 
+    const infoResponse = await axios.get(
+      'https://api.spoonacular.com/recipes/informationBulk',
+      {
+        params: {
+          apiKey: process.env.SPOONACULAR_API_KEY,
+          ids: recipeIds.join(',')
+        }
+      }
+    );
+
+    res.json({ results: infoResponse.data });
   } catch (err) {
     console.error('Spoonacular API error:', err.message);
     res.status(500).json({ error: 'Failed to fetch recipes' });
@@ -32,4 +48,3 @@ router.post('/getRecipes', authenticate, async (req, res) => {
 });
 
 module.exports = router;
-
