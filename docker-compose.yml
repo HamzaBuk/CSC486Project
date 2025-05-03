@@ -18,7 +18,7 @@ services:
     container_name: smartrecipe-frontend
     restart: always
     ports:
-      - "3000:80"   # Map server's port 3000 to nginx port 80
+      - "3000:80"
     volumes:
       - frontend_files:/usr/share/nginx/html
 
@@ -35,12 +35,11 @@ services:
       DB_HOST: database
       DB_PORT: ${DB_PORT}
       SPOONACULAR_API_KEY: ${SPOONACULAR_API_KEY}
-      JWT_SECRET: $(JWT_SECRET)
+      JWT_SECRET: ${JWT_SECRET}
     volumes:
-      - frontend_files:/frontend_files
+      - .:/app
     depends_on:
       - database
-      - frontend
 
 volumes:
   postgres_data:

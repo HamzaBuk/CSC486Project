@@ -1,23 +1,20 @@
-#Use node.js 
+# Use node.js image
 FROM node:20
 
-#working directory
+# Set working directory inside container
 WORKDIR /app
 
-#copy package.json 
+# Copy only dependency descriptors first
 COPY package*.json ./
 
-#Install all npm dependencies 
-RUN npm install 
+# Install dependencies
+RUN npm install
 
-RUN npm uninstall bcrypt
+# Copy the rest of the app code
+COPY . .
 
-RUN npm install bcrypt
-
-#copy all the app
-COPY . . 
-
-#expose port
+# Expose the app port
 EXPOSE 4000
-#start the server
-CMD ["node", "server.js"]
+
+# Start the app using nodemon for development
+CMD ["npm", "run", "dev"]
