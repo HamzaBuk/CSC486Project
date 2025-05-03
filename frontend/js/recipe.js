@@ -1,5 +1,6 @@
 const backendURL = `http://${window.location.hostname}:4000`;
 
+
 const getRecipes = () => {
   const ingredientsInput = document.querySelector('#ingredients').value;
   const diet = document.querySelector('#diet').value;
@@ -32,7 +33,7 @@ const getRecipes = () => {
     return res.json();
   })
   .then(data => {
-    if (!data.results || data.results.length === 0) {
+    if (data.length === 0) {
       alert("No recipes found.");
     } else {
       showRecipes(data);
@@ -44,86 +45,71 @@ const getRecipes = () => {
   });
 };
 
+
 const saveRecipe = (id) => {
-  const savedRecipe = savedRecipes.find((recipe) => recipe.id === id);
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    alert("You must be logged in to save recipes.");
-    return;
-  }
-
-  fetch(`${backendURL}/savedRecipes/saveRecipe`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      recipeId: savedRecipe.id,
-      title: savedRecipe.title,
-      image: savedRecipe.image || '' // optional field
-    })
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Failed to save recipe');
-    return res.json();
-  })
-  .then(data => {
-    alert(`"${data.title}" saved successfully.`);
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Error saving recipe: " + err.message);
-  });
-};
+    const savedRecipe = savedRecipes.find((recipe) => recipe.id === id)
+    fetch(`${backendURL}/savedRecipes/saveRecipe`, {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
+    .then((res) =>  res.json())
+    .then((jsoned) => {
+         console.log(jsoned.results[0].title);
+         alert(savedRecipe.title+" saved.")
+     });
+}
 
 let savedRecipes = [];
 const showRecipes = (recipeData) => {
-  const container = document.querySelector('#recipes');
-  container.innerHTML = '';
-  savedRecipes = [];
-  recipeData.results.forEach(recipe => {
-    const savedStuff = {
-      title: recipe.title,
-      id: recipe.id,
-      summary: recipe.summary,
-      image: recipe.image || '',
-      ingredients: getIngredientsList(recipe),
-      instructionSteps: getInstructionSteps(recipe)
-    };
-    savedRecipes.push(savedStuff);
-
-    const accordionCode = `
-      <h2 class="accordion-header">
+    const container = document.querySelector('#recipes');
+    container.innerHTML = '';
+    savedRecipes = [];
+    recipeData.results.forEach(recipe => {
+        savedStuff = {
+            title: recipe.title,
+            id: recipe.id,
+            summary: recipe.summary,
+            ingredients: getIngredientsList(recipe),
+            instructionSteps: getInstructionSteps(recipe)
+        }
+        savedRecipes.push(savedStuff)
+        const accordionCode = `
+        <h2 class="accordion-header">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#recipe${recipe.id}" aria-expanded="false" aria-controls="recipe${recipe.id}">
-          ${recipe.title}
+        ${recipe.title}
         </button>
-      </h2>
-      <div id="recipe${recipe.id}" class="accordion-collapse collapse" data-bs-parent="#recipes">
+        </h2>
+        <div id="recipe${recipe.id}" class="accordion-collapse collapse " data-bs-parent="#recipes">
         <div class="accordion-body">
-          <div>${recipe.summary}</div>
-          <div><h3>Ingredients</h3>${savedStuff.ingredients}</div>
-          <div><h3>Instructions</h3>${savedStuff.instructionSteps}</div>
-          <div><button type="button" class="btn btn-primary" onclick="saveRecipe(${recipe.id})">Save Recipe</button></div>
+        <div>
+        ${recipe.summary}
         </div>
-      </div>`;
-
-    const accordion = document.createElement('div');
-    accordion.innerHTML = accordionCode;
-    accordion.classList.add('accordion-item');
-    container.appendChild(accordion);
-  });
-};
+        <div>
+        <h3>Ingredients</h3>
+        ${savedStuff.ingredients}
+        </div>
+        <div>
+        <h3>Instructions</h3>
+        ${savedStuff.instructionSteps}
+        </div>
+        <div>
+        <button type="button" class="btn btn-primary" onclick="saveRecipe(${recipe.id})">Save Recipe</button>
+        </div>
+        </div>
+        </div>`
+        
+        const accordion = document.createElement('div');
+        accordion.innerHTML = accordionCode;
+        accordion.classList.add('accordion-item');
+        container.appendChild(accordion);
+    });
+}
 
 const getIngredientsList = (recipe) => {
-  let ingredientList = '<ul>';
-  recipe.extendedIngredients.forEach(ing => {
-    ingredientList += `<li>${ing.original}</li>`;
-  });
-  ingredientList += '</ul>';
-  return ingredientList;
-};
+    let ingredientList = '<ul>';
+    recipe.extendedIngredients.forEach(ing => {
+        ingredientList += `<li>${ing.original}</li>`
+    });
+    ingredientList += '</ul>';
+    return ingredientList;
+}
 
 const getInstructionSteps = (recipe) => {
   if (
@@ -141,3 +127,4 @@ const getInstructionSteps = (recipe) => {
   instructionSteps += '</ol>';
   return instructionSteps;
 };
+
