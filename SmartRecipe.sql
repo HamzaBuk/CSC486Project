@@ -40,11 +40,14 @@ CREATE TABLE recipe_ingredients (
 );
 
 CREATE TABLE saved_recipes (
-    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
-    recipe_id INT REFERENCES recipes(id) ON DELETE CASCADE,
-    saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, recipe_id)
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  recipe_id INTEGER NOT NULL,
+  title TEXT,
+  image TEXT,
+  saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE pantry (
     user_id INT REFERENCES Users(id) ON DELETE CASCADE,

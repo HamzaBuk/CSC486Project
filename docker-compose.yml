@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./SmartRecipe.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "${DB_PORT}:5432"
+      - "5432:5432"
     container_name: database
 
   smartrecipe-app:

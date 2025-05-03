@@ -47,14 +47,37 @@ const getRecipes = () => {
 
 
 const saveRecipe = (id) => {
-    const savedRecipe = savedRecipes.find((recipe) => recipe.id === id)
-    fetch(`${backendURL}/savedRecipes/saveRecipe`, {method:'POST', body: JSON.stringify(savedRecipe), headers: {'content-type':'application/json'}})
-    .then((res) =>  res.json())
-    .then((jsoned) => {
-         console.log(jsoned.results[0].title);
-         alert(savedRecipe.title+" saved.")
-     });
-}
+  const token = localStorage.getItem('token');
+  const savedRecipe = savedRecipes.find((recipe) => recipe.id === id);
+
+  const payload = {
+    recipeId: savedRecipe.id,
+    title: savedRecipe.title,
+    image: savedRecipe.image || 'https://via.placeholder.com/150'  // add default if missing
+  };
+
+  fetch(`${backendURL}/savedRecipes/saveRecipe`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify(payload)
+  })
+  .then((res) => {
+    if (!res.ok) throw new Error('Failed to save recipe');
+    return res.json();
+  })
+  .then((jsoned) => {
+    console.log(jsoned.title + ' saved!');
+    alert(jsoned.title + " saved.");
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error saving recipe: " + err.message);
+  });
+};
+
 
 let savedRecipes = [];
 const showRecipes = (recipeData) => {
