@@ -1,4 +1,4 @@
-# Use Node.js
+# Use Node.js base image
 FROM node:20
 
 # Set working directory
@@ -8,17 +8,17 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Install nodemon globally
+
+RUN npm install dotenv
+
+# Install nodemon 
 RUN npm install -g nodemon
 
-
-COPY wait-for-it.sh ./wait-for-it.sh
-RUN chmod +x ./wait-for-it.sh
-
-# Copy the full app code
+# Copy all app files
 COPY . .
 
 # Expose the port
 EXPOSE 4000
 
-CMD ["./wait-for-it.sh", "smartrecipe-db:5432", "--", "nodemon", "server.js"]
+# Start the server
+CMD ["nodemon", "server.js"]
