@@ -5,7 +5,9 @@ const authRoutes = require('./routes/auth');
 const ingredientRoutes = require('./routes/ingredients');
 const spoonacularRoutes = require('./routes/spoonacular');
 const savedRecipeRoutes = require('./routes/savedRecipes');
+const cors = require('cors');
 
+app.use(cors()); 
 app.use(express.json());
 app.use(express.static('frontend', {index: "login.html"}));
 
