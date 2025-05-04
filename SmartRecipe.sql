@@ -45,7 +45,11 @@ CREATE TABLE saved_recipes (
   recipe_id INTEGER NOT NULL,
   title TEXT,
   image TEXT,
-  saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  ingredients TEXT,
+  instructions TEXT,
+  summary TEXT,
+  saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_user_recipe UNIQUE (user_id, recipe_id)
 );
 
 

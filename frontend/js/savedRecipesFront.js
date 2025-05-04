@@ -1,83 +1,62 @@
 const backendURL = `http://${window.location.hostname}:4000`;
 
 const getRecipes = () => {
-    const token = localStorage.getItem('token'); //get ID code;
-    const input = {id};
-    fetch(`${backendURL}/getSavedRecipes`, {method:'POST', body: JSON.stringify(input), 
-        headers: {'content-type':'application/json',
-                  'Authorization': 'Bearer ' + token
-        }})
-    .then((res) =>  res.json())
-    .then((jsoned) => {
-        //console.log(jsoned.results[0].title);
-        showRecipes(jsoned);
-    });
+  const token = localStorage.getItem('token');
 
-}
+  fetch(`${backendURL}/savedRecipes/getSavedRecipes`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to fetch saved recipes');
+    return res.json();
+  })
+  .then(jsoned => {
+    showRecipes({ results: jsoned });
+  })
+  .catch(err => {
+    console.error("Error loading saved recipes:", err);
+    alert("Error loading saved recipes: " + err.message);
+  });
+};
+
 const showRecipes = (recipeData) => {
-    const container = document.querySelector('#recipes');
-    container.innerHTML = '';
-    savedRecipes = [];
-    recipeData.results.forEach(recipe => {
-        savedStuff = {
-            title: recipe.title,
-            id: recipe.id,
-            summary: recipe.summary,
-            ingredients: getIngredientsList(recipe),
-            instructionSteps: getInstructionSteps(recipe)
-        }
-        savedRecipes.push(savedStuff)
-        const accordionCode = `
-        <h2 class="accordion-header">
+  const container = document.querySelector('#recipes');
+  container.innerHTML = '';
+
+  recipeData.results.forEach(recipe => {
+    const accordion = document.createElement('div');
+    accordion.innerHTML = `
+      <h2 class="accordion-header">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#recipe${recipe.id}" aria-expanded="false" aria-controls="recipe${recipe.id}">
-        ${recipe.title}
+          ${recipe.title}
         </button>
-        </h2>
-        <div id="recipe${recipe.id}" class="accordion-collapse collapse " data-bs-parent="#recipes">
+      </h2>
+      <div id="recipe${recipe.id}" class="accordion-collapse collapse" data-bs-parent="#recipes">
         <div class="accordion-body">
-        <div>
-        ${recipe.summary}
+          <div><strong>Summary:</strong><br>${recipe.summary || "<i>No summary available</i>"}</div>
+          <div><h3>Ingredients</h3>${getIngredientsList(recipe)}</div>
+          <div><h3>Instructions</h3>${getInstructionSteps(recipe)}</div>
+          <div><button type="button" class="btn btn-primary" onclick="deleteRecipe(${recipe.id})">Delete Recipe</button></div>
         </div>
-        <div>
-        <h3>Ingredients</h3>
-        ${savedStuff.ingredients}
-        </div>
-        <div>
-        <h3>Instructions</h3>
-        ${savedStuff.instructionSteps}
-        </div>
-        <div>
-        <button type="button" class="btn btn-primary" onclick="deleteRecipe(${recipe.id})">Delete Recipe</button>
-        </div>
-        </div>
-        </div>`
-        
-        const accordion = document.createElement('div');
-        accordion.innerHTML = accordionCode;
-        accordion.classList.add('accordion-item');
-        container.appendChild(accordion);
-    });
-}
+      </div>`;
+    accordion.classList.add('accordion-item');
+    container.appendChild(accordion);
+  });
+};
 
 const getIngredientsList = (recipe) => {
-    let ingredientList = '<ul>';
-    recipe.extendedIngredients.forEach(ing => {
-        ingredientList += `<li>${ing.original}</li>`
-    });
-    ingredientList += '</ul>';
-    return ingredientList;
-}
+  return recipe.ingredients || "<i>No ingredients saved</i>";
+};
 
 const getInstructionSteps = (recipe) => {
-    let instructionSteps = '<ol>';
-    recipe.analyzedInstructions[0].steps.forEach(step => {
-       instructionSteps += `<li>${step.step}</li>`
-    });
-    instructionSteps += '</ol>';
-    return instructionSteps;
-}
+  return recipe.instructions || "<i>No instructions saved</i>";
+};
 
 const deleteRecipe = (id) => {
-    var element = document.getElementById(id);
-    element.parentNode.removeChild(element);
-}
+  const element = document.getElementById(id);
+  if (element) element.parentNode.removeChild(element);
+};
