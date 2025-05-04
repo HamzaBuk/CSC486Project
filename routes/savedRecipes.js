@@ -8,7 +8,7 @@ router.post('/saveRecipe', authenticateToken, async (req, res) => {
   try {
     const { recipeId, title, image, ingredients, instructions, summary } = req.body;
     const userId = req.user.id;
-
+//get the saved recipes from the db as a query
     await db.query(`
       INSERT INTO saved_recipes (user_id, recipe_id, title, image, ingredients, instructions, summary)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
