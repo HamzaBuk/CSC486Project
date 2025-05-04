@@ -23,6 +23,7 @@ const getRecipes = () => {
   });
 };
 
+//calls the recipes column from DB 
 const showRecipes = (recipeData) => {
   const container = document.querySelector('#recipes');
   container.innerHTML = '';
@@ -48,6 +49,7 @@ const showRecipes = (recipeData) => {
   });
 };
 
+//using the DB instead of calling spoonacular everytime
 const getIngredientsList = (recipe) => {
   return recipe.ingredients || "<i>No ingredients saved</i>";
 };
