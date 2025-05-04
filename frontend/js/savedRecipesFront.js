@@ -78,5 +78,6 @@ const getInstructionSteps = (recipe) => {
 }
 
 const deleteRecipe = (id) => {
-    //stuff with database
+    var element = document.getElementById(id);
+    element.parentNode.removeChild(element);
 }

@@ -57,7 +57,7 @@ const showIngredients = (ingredientData) => {
     container.innerHTML = '';
     ingredientData.ingredients.forEach(ingredient => {
         const containerCode = `
-        <div class="container-md">
+        <div class="container-md" id=${ingredient.name}>
         <body>${ingredient.name} ${ingredient.quantity} ${ingredient.unit}</body>
         <div>
         <button type="button" class="btn btn-primary" onclick="deleteIngredient(${ingredient.name})">Delete Ingredient</button>
@@ -72,6 +72,6 @@ const showIngredients = (ingredientData) => {
 }
 
 const deleteIngredient = (id) => {
-    //stuff with database
-    alert("The delete button called correctly");
+    var element = document.getElementById(id);
+    element.parentNode.removeChild(element);
 }
